@@ -208,6 +208,14 @@
   pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.8);z-index:1000;
 }
 
+.pin-tooltip-id{
+  display:inline-block;
+  font-size:9px;font-weight:700;letter-spacing:.1em;
+  color:var(--bg);background:var(--olive);
+  padding:1px 5px;border-radius:2px;
+  margin-left:8px;vertical-align:middle;
+}
+
 /* ── Modal crear/editar pin ── */
 #pin-create-modal{
   position:fixed;inset:0;background:rgba(0,0,0,.75);
@@ -395,12 +403,20 @@
 }
 .pin-modal-header{
   display:flex;align-items:center;gap:10px;margin-bottom:5px;
-  padding:16px 20px 0;
+  padding:16px 20px 0;flex-wrap:wrap;
 }
 .pin-modal-icon{font-size:20px;line-height:1;flex-shrink:0}
 .pin-modal-title{
   font-family:'IBM Plex Mono','Courier New',monospace;
   font-size:18px;font-weight:700;color:var(--text);line-height:1.2;
+  flex:1;
+}
+.pin-modal-id{
+  font-family:'IBM Plex Mono','Courier New',monospace;
+  font-size:9px;font-weight:700;letter-spacing:.14em;
+  color:var(--bg);background:var(--olive);
+  padding:2px 7px;border-radius:3px;
+  flex-shrink:0;margin-left:auto;
 }
 .pin-modal-tag{
   display:inline-block;margin:0 20px;

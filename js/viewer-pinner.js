@@ -125,6 +125,8 @@ const Pinner = (() => {
     modalIcon.style.color = def.color;
 
     document.getElementById('modal-pin-title').textContent = pin.title || def.label;
+    const idEl = document.getElementById('modal-pin-id');
+    if(idEl){ idEl.textContent = pin.pin_id || ''; idEl.style.display = pin.pin_id ? '' : 'none'; }
     document.getElementById('modal-pin-tag').textContent   = def.label;
     document.getElementById('modal-pin-desc').innerHTML    = pin.desc || '';
 

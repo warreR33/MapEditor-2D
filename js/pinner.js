@@ -345,6 +345,22 @@ const Pinner = (() => {
     });
   }
 
+  const TYPE_PREFIX = {
+    door:'DR', note:'NT', environment:'POI', key_item:'KI',
+    transit:'TR', save_zone:'SZ', interactable:'IA', item:'IT',
+    consumed:'EN', boss:'BS',
+  };
+
+  function nextPinId(type){
+    const prefix = TYPE_PREFIX[type] || type.slice(0,2).toUpperCase();
+    const existing = pins
+      .map(p => p.pin_id || '')
+      .filter(id => id.startsWith(prefix + '_'))
+      .map(id => parseInt(id.split('_')[1]) || 0);
+    const next = existing.length ? Math.max(...existing) + 1 : 1;
+    return `${prefix}_${String(next).padStart(2,'0')}`;
+  }
+
   async function confirmPin(){
     const type  = activeType || 'save_zone';
     const def   = PIN_TYPES[type] || PIN_TYPES.save_zone;
@@ -386,7 +402,8 @@ const Pinner = (() => {
       const id = Date.now() + Math.random();
       const img0 = files[0] ? await uploadImage(files[0], id) : null;
       const img1 = files[1] ? await uploadImage(files[1], id + 1) : null;
-      pins.push({ id, type, x:pendingPos.x, y:pendingPos.y, title, desc, hidden:false, unlocks, requirements, images:[img0, img1] });
+      const pin_id = nextPinId(type);
+      pins.push({ id, type, x:pendingPos.x, y:pendingPos.y, title, desc, hidden:false, unlocks, requirements, images:[img0, img1], pin_id });
     }
     pendingImageRemoved = [false, false];
     closeCreateModal();
@@ -448,7 +465,10 @@ const Pinner = (() => {
       el.style.transform = `translate(calc(${tx}px - 50%), calc(${ty}px - 100%))`;
       const tooltip = document.createElement('div');
       tooltip.className   = 'pin-tooltip';
-      tooltip.textContent = pin.title || (PIN_TYPES[pin.type]||{}).label || '';
+      const tooltipLabel = pin.title || (PIN_TYPES[pin.type]||{}).label || '';
+      tooltip.innerHTML = pin.pin_id
+        ? `${tooltipLabel} <span class="pin-tooltip-id">${pin.pin_id}</span>`
+        : tooltipLabel;
       el.appendChild(tooltip);
       el.addEventListener('click', e=>{ e.stopPropagation(); openReadModal(pin.id); });
       pinElements.set(String(pin.id), el);
@@ -560,6 +580,8 @@ const Pinner = (() => {
     const modalIcon = document.getElementById('modal-pin-icon'); modalIcon.innerHTML = `<img src="/icons/${def.icon}.svg" width="28" height="28" style="filter:brightness(0) saturate(100%) invert(.82) sepia(.25)">`;  modalIcon.style.color = def.color;
     document.getElementById('modal-pin-icon').style.color  = def.color;
     document.getElementById('modal-pin-title').textContent = pin.title||def.label;
+    const idEl = document.getElementById('modal-pin-id');
+    if(idEl){ idEl.textContent = pin.pin_id || ''; idEl.style.display = pin.pin_id ? '' : 'none'; }
     document.getElementById('modal-pin-tag').textContent   = def.label;
     document.getElementById('modal-pin-desc').innerHTML  = pin.desc||'';
 
