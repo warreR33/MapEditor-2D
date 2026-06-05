@@ -49,8 +49,9 @@ const App = (() => {
     const prev = currentMode;
     currentMode = mode;
 
-    if (prev === 'pins') Pinner.deactivate();
-    if (prev === 'steps') ViewerSteps.deactivate();
+    if (prev === 'pins')        Pinner.deactivate();
+    if (prev === 'steps')       ViewerSteps.deactivate();
+    if (prev === 'walkthrough') ViewerSteps.deactivate();
 
     document.querySelectorAll('.btn-mode').forEach(b => b.classList.remove('active'));
 
@@ -62,11 +63,16 @@ const App = (() => {
       if (showBtn) showBtn.style.display = 'none';
       document.getElementById('btn-viewer-pins').classList.add('active');
       Pinner.activate();
-    } else {
+    } else if (mode === 'steps') {
       pinnerRight.style.display = 'none';
       if (showBtn) showBtn.style.display = 'none';
       document.getElementById('btn-viewer-steps').classList.add('active');
-      ViewerSteps.activate();
+      ViewerSteps.activate(false);
+    } else if (mode === 'walkthrough') {
+      pinnerRight.style.display = 'none';
+      if (showBtn) showBtn.style.display = 'none';
+      document.getElementById('btn-viewer-walkthrough').classList.add('active');
+      ViewerSteps.activate(true);
     }
   }
 
@@ -163,6 +169,7 @@ const App = (() => {
 
     document.getElementById('btn-viewer-pins')?.addEventListener('click', () => setMode('pins'));
     document.getElementById('btn-viewer-steps')?.addEventListener('click', () => setMode('steps'));
+    document.getElementById('btn-viewer-walkthrough')?.addEventListener('click', () => setMode('walkthrough'));
 
     document.querySelectorAll('#app-shell .view-mode-btn').forEach(btn => {
       btn.addEventListener('click', () => Editor.setViewMode(btn.dataset.mode));

@@ -9,6 +9,7 @@ const Steps = (() => {
   let panStart = null, panOffStart = null;
 
   // Arrow state
+  let walkthroughMode = false;
   let arrowToolActive = false;
   let drawingArrow = null;
   let arrowMousePos = null;
@@ -543,16 +544,20 @@ const Steps = (() => {
       body.appendChild(checkSection);
     }
 
-    if (arrow.checks && arrow.checks.length && arrow.text) {
+    const displayText = walkthroughMode
+      ? (arrow.walkthrough_text || arrow.text)
+      : arrow.text;
+
+    if (arrow.checks && arrow.checks.length && displayText) {
       const sep = document.createElement('div');
       sep.style.cssText = 'height:1px;background:var(--sep);margin:8px 0';
       body.appendChild(sep);
     }
 
-    if (arrow.text) {
+    if (displayText) {
       const textEl = document.createElement('p');
       textEl.className = 'arrow-panel-text';
-      textEl.textContent = arrow.text;
+      textEl.textContent = displayText;
       body.appendChild(textEl);
     }
 
@@ -848,7 +853,8 @@ const Steps = (() => {
     App.markDirty();
   }
 
-  function activate() {
+  function activate(wtMode = false) {
+    walkthroughMode = wtMode;
     isActive = true;
     document.getElementById('pinner-panel').classList.remove('hidden');
     if (typeof Pinner !== 'undefined') {
@@ -874,6 +880,7 @@ const Steps = (() => {
 
   function deactivate() {
     isActive = false;
+    walkthroughMode = false;
     arrowToolActive = false;
     drawingArrow = null;
     arrowMousePos = null;

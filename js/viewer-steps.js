@@ -5,6 +5,7 @@ const ViewerSteps = (() => {
   let steps = [];
   let activeStepId = null;
   let isActive = false;
+  let walkthroughMode = false;
   let hideOthers = false;
   let mapContainer = null;
   let cwrap = null;
@@ -218,11 +219,15 @@ const ViewerSteps = (() => {
       });
       bodyHtml += '</div>';
     }
-    if (arrow.checks && arrow.checks.length && arrow.text) {
+    const displayText = walkthroughMode
+      ? (arrow.walkthrough_text || arrow.text)
+      : arrow.text;
+
+    if (arrow.checks && arrow.checks.length && displayText) {
       bodyHtml += '<div style="height:1px;background:var(--sep);margin:8px 0"></div>';
     }
-    if (arrow.text) {
-      bodyHtml += '<div style="font-family:\'IBM Plex Mono\',\'Courier New\',monospace;font-size:12px;color:var(--text-dim);line-height:1.75;white-space:pre-wrap">' + arrow.text.replace(/</g,'&lt;') + '</div>';
+    if (displayText) {
+      bodyHtml += '<div style="font-family:\'IBM Plex Mono\',\'Courier New\',monospace;font-size:12px;color:var(--text-dim);line-height:1.75;white-space:pre-wrap">' + displayText.replace(/</g,'&lt;') + '</div>';
     }
 
     panel.innerHTML = `
@@ -254,7 +259,7 @@ const ViewerSteps = (() => {
     panel.innerHTML = `
       <div class="steps-panel">
         <div class="steps-header">
-          <h3>Steps</h3>
+          <h3>${walkthroughMode ? 'Walkthrough' : 'Narrativa'}</h3>
         </div>
         <div class="steps-list" id="vsteps-list"></div>
         <div style="padding:8px 12px;border-top:1px solid var(--sep);flex-shrink:0">
@@ -349,7 +354,8 @@ const ViewerSteps = (() => {
   }
 
   // ── Activate / Deactivate ──
-  function activate() {
+  function activate(wtMode = false) {
+    walkthroughMode = wtMode;
     isActive = true;
     document.getElementById('pinner-panel').classList.remove('hidden');
     if (typeof Pinner !== 'undefined') {
@@ -364,6 +370,7 @@ const ViewerSteps = (() => {
 
   function deactivate() {
     isActive = false;
+    walkthroughMode = false;
     hideOthers = false;
     closeArrowReadModal();
     document.getElementById('pinner-panel').classList.add('hidden');

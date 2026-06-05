@@ -1,5 +1,75 @@
 /* pinner.css */
 
+/* ── Walkthrough panel ── */
+.wt-list{
+  flex:1;overflow-y:auto;padding:8px 0;
+}
+
+.wt-step-section{
+  border-bottom:1px solid var(--sep);
+  padding:10px 14px 12px;
+}
+
+.wt-step-title{
+  display:flex;align-items:center;gap:8px;
+  font-family:'IBM Plex Mono','Courier New',monospace;
+  font-size:11px;font-weight:700;letter-spacing:.08em;
+  color:var(--olive);text-transform:uppercase;
+  margin-bottom:8px;
+}
+
+.wt-step-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:20px;height:20px;padding:0 5px;
+  background:var(--olive);color:#000;
+  border-radius:3px;font-size:9px;font-weight:700;
+  flex-shrink:0;
+}
+
+.wt-no-arrows{
+  font-size:10px;color:var(--muted);
+  font-family:'IBM Plex Mono','Courier New',monospace;
+  padding-left:4px;
+}
+
+.wt-arrow-block{
+  margin-bottom:8px;
+}
+
+.wt-arrow-hdr{
+  font-family:'IBM Plex Mono','Courier New',monospace;
+  font-size:9px;letter-spacing:.1em;color:var(--muted);
+  margin-bottom:4px;
+}
+
+.wt-check-list{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:2px;
+}
+
+.wt-check-list li{
+  font-family:'IBM Plex Mono','Courier New',monospace;
+  font-size:10px;color:var(--text);
+  padding:3px 8px;border-radius:3px;
+  background:rgba(255,255,255,.03);
+  border-left:2px solid var(--border);
+  line-height:1.4;
+}
+
+.wt-check-list li.done{
+  color:var(--muted);
+  text-decoration:line-through;
+  border-left-color:transparent;
+}
+
+.wt-arrow-text{
+  font-family:'IBM Plex Mono','Courier New',monospace;
+  font-size:10px;color:var(--text);
+  margin:0;padding:5px 10px;
+  border-left:2px solid var(--sep);
+  line-height:1.6;
+}
+
 /* ── Panel derecho pinner (colapsable) ── */
 #pinner-right{
   width:280px;background:var(--panel);

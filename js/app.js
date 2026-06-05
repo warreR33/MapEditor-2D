@@ -115,9 +115,10 @@ const App = (() => {
     const editorToolbar  = document.getElementById('editor-toolbar');
 
     // Deactivate previous mode
-    if(prevMode === 'pinner') Pinner.deactivate();
-    if(prevMode === 'steps')  Steps.deactivate();
-    if(prevMode === 'editor') Editor.deactivate();
+    if(prevMode === 'pinner')      Pinner.deactivate();
+    if(prevMode === 'steps')       Steps.deactivate();
+    if(prevMode === 'walkthrough') Steps.deactivate();
+    if(prevMode === 'editor')      Editor.deactivate();
 
     // Reset buttons
     document.querySelectorAll('.btn-mode').forEach(b=>b.classList.remove('active'));
@@ -161,6 +162,19 @@ const App = (() => {
       document.getElementById('hint').textContent = 'Click a pin to toggle visibility for the active step';
 
       Steps.activate();
+
+    } else if(mode === 'walkthrough'){
+      if(editorToolbar) editorToolbar.classList.add('hidden');
+      layersPanel.classList.add('hidden');
+      pinnerRight.style.display = 'none';
+      if(showBtn) showBtn.style.display = 'none';
+      pinCreatePanel?.classList.add('hidden');
+      document.getElementById('coords').style.display = 'none';
+
+      document.getElementById('btn-mode-walkthrough').classList.add('active');
+      document.getElementById('hint').textContent = 'Click a pin to toggle visibility for the active step';
+
+      Steps.activate(true);
     }
   }
 
@@ -214,6 +228,7 @@ const App = (() => {
     document.getElementById('btn-mode-editor')?.addEventListener('click', ()=>setMode('editor'));
     document.getElementById('btn-mode-pinner')?.addEventListener('click', ()=>setMode('pinner'));
     document.getElementById('btn-mode-steps')?.addEventListener('click', ()=>setMode('steps'));
+    document.getElementById('btn-mode-walkthrough')?.addEventListener('click', ()=>setMode('walkthrough'));
     document.getElementById('btn-save-now')?.addEventListener('click', exportProject);
     document.getElementById('json-load-input')?.addEventListener('change', handleLoadProject);
 
