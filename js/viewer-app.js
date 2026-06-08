@@ -16,13 +16,25 @@ const App = (() => {
 
   // ── Carga del main_save ───────────────────────────────────
   async function loadMainSave() {
+    // Intentar endpoint del servidor local primero
     try {
-      const res  = await fetch('/api/main_save');
-      const data = await res.json();
-      return (data && data.exists !== false) ? data : null;
-    } catch {
-      return null;
-    }
+      const res = await fetch('/api/main_save');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.exists !== false) return data;
+      }
+    } catch {}
+
+    // Fallback: archivo estático directo (hosting sin backend)
+    try {
+      const res = await fetch('/main_save.json');
+      if (res.ok) {
+        const data = await res.json();
+        if (data) return data;
+      }
+    } catch {}
+
+    return null;
   }
 
   function normalizeProjectData(data) {
